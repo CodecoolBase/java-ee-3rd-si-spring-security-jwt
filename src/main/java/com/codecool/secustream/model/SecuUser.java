@@ -1,9 +1,6 @@
 package com.codecool.secustream.model;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Singular;
+import lombok.*;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -14,8 +11,9 @@ import java.util.Set;
 
 @Entity
 @Data
-@Builder
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class SecuUser {
 
     @Id
