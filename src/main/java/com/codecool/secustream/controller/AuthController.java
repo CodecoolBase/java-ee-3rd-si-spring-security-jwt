@@ -1,5 +1,6 @@
 package com.codecool.secustream.controller;
 
+import com.codecool.secustream.security.JwtRequestFilter;
 import com.codecool.secustream.security.JwtUtil;
 import com.codecool.secustream.security.UserCredentials;
 import lombok.RequiredArgsConstructor;
@@ -27,13 +28,13 @@ public class AuthController {
                 secuUser.getUsername(),
                 secuUser.getPassword()
         ));
-        String jwtToken = jwtUtil.generateToken(authentication.getName());
+        String jwtToken = jwtUtil.generateToken(authentication);
         addTokenToCookie(response, jwtToken);
         return ResponseEntity.ok().body(secuUser.getUsername());
     }
 
     private void addTokenToCookie(HttpServletResponse response, String token) {
-        ResponseCookie cookie = ResponseCookie.from("token", token)
+        ResponseCookie cookie = ResponseCookie.from(JwtRequestFilter.TOKEN, token)
                 .domain("localhost") // should be parameterized
                 .sameSite("Strict")
 //                .secure(true)
