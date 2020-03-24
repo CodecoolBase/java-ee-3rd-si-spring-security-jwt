@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,6 +20,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final SecuUserRepository secuUserRepository;
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         SecuUser secuUser = secuUserRepository
                 .findById(username)
@@ -27,7 +29,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return new User(
                 secuUser.getUserName(),
                 secuUser.getHashedPassword(),
-                secuUser.getRoles().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList())
+                secuUser.getRoles()
+                        .stream()
+                        .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+                        .collect(Collectors.toList())
         );
     }
 }

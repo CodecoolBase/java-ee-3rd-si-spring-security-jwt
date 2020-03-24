@@ -25,5 +25,5 @@ public class SecuUser {
     @ElementCollection
     @Singular
     @NotEmpty
-    private Set<String> roles;
+    private Set<Role> roles;
 }
