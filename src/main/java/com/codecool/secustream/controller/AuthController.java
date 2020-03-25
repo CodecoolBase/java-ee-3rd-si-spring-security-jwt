@@ -3,7 +3,9 @@ package com.codecool.secustream.controller;
 import com.codecool.secustream.security.JwtRequestFilter;
 import com.codecool.secustream.security.JwtUtil;
 import com.codecool.secustream.security.UserCredentials;
+import com.codecool.secustream.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +23,7 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
+    private final UserService userService;
 
     @PostMapping("/auth/login")
     public ResponseEntity<String> login(@RequestBody UserCredentials secuUser, HttpServletResponse response) {
@@ -31,6 +34,12 @@ public class AuthController {
         String jwtToken = jwtUtil.generateToken(authentication);
         addTokenToCookie(response, jwtToken);
         return ResponseEntity.ok().body(secuUser.getUsername());
+    }
+
+    @PostMapping("/auth/signup")
+    public ResponseEntity<String> signup(@RequestBody UserCredentials secuUser) {
+        userService.register(secuUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(secuUser.getUsername());
     }
 
     private void addTokenToCookie(HttpServletResponse response, String token) {
