@@ -1,4 +1,4 @@
-package com.codecool.secustream.security;
+package com.codecool.secustream.controller.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
